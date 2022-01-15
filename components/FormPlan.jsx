@@ -1,0 +1,103 @@
+import { useState } from 'react';
+import { Text, View, StyleSheet, ToastAndroid } from 'react-native';
+import { Input, Button, Icon } from 'react-native-elements';
+import DateTimePicker from '@react-native-community/datetimepicker';
+
+import { months } from '../data/date';
+
+import { API, jsonConfig } from '../api/config';
+import { TouchableHighlight } from 'react-native-gesture-handler';
+
+export default function FormPlan() {
+	const [form, setForm] = useState({
+		title: '',
+		body: 'I hope this plan be succes!',
+	});
+	const [date, setDate] = useState(new Date());
+	const [time, setTime] = useState(new Date());
+	const [showDate, setShowDate] = useState(false);
+	const [showTime, setShowTime] = useState(false);
+
+	const handleShowDate = () => {
+		setShowDate(!showDate);
+	};
+	const makePlan = async () => {
+		try {
+			await API.post('/plan', JSON.stringify({ ...form, date: date.getTime() }), jsonConfig)
+				.then((response) => {
+					console.log({ ...form, date });
+					ToastAndroid.show(response.data.status, ToastAndroid.SHORT);
+				})
+				.catch((error) => {
+					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
+				});
+		} catch (error) {}
+	};
+	const handleMakePlan = () => {
+		makePlan();
+	};
+	return (
+		<View style={styles.input}>
+			<Input placeholder='Type your title plan here' onChangeText={(e) => setForm({ ...form, title: e })} />
+			<Text>
+				<Button
+					onPress={handleShowDate}
+					icon={<Icon size={20} name='calendar-today' color='white' />}
+					title={
+						<Text style={{ color: 'white' }}>{`${
+							months[date.getMonth()]
+						} ${date.getDate()} at ${date.getHours()}:${date.getMinutes()}`}</Text>
+					}
+				/>
+			</Text>
+			<View style={{ flexWrap: 'wrap' }}>
+				<Input
+					placeholder='Description'
+					style={{ flexWrap: 'nowrap', flexDirection: 'column' }}
+					multiline={true}
+					onChangeText={(e) => setForm({ ...form, body: e })}
+				/>
+			</View>
+			<Button title='Make a plan' onPress={handleMakePlan} />
+			{showDate && (
+				<DateTimePicker
+					mode='date'
+					onChange={(e, i) => {
+						setDate(i ? i : date);
+						handleShowDate();
+						setShowTime(!showTime);
+					}}
+					value={date}
+				/>
+			)}
+			{showTime && (
+				<DateTimePicker
+					mode='time'
+					onChange={(e, i) => {
+						setTime(i ? i : time);
+						date.setHours(time.getHours());
+						date.setMinutes(time.getMinutes());
+						setShowTime(!showTime);
+					}}
+					value={time}
+				/>
+			)}
+		</View>
+	);
+}
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		padding: 20,
+	},
+	input: {
+		backgroundColor: 'white',
+		borderBottomEndRadius: 10,
+		borderBottomStartRadius: 10,
+		padding: 10,
+	},
+	dateButton: {
+		backgroundColor: '#4CAF50',
+	},
+});

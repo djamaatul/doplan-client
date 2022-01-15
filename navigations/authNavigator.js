@@ -8,7 +8,7 @@ function authNavigator() {
 	return (
 		<Stack.Navigator>
 			<Stack.Screen options={{ headerShown: false }} name='login' component={Login} />
-			<Stack.Screen name='register' component={Register} />
+			<Stack.Screen options={{ headerShown: false }} name='register' component={Register} />
 		</Stack.Navigator>
 	);
 }
