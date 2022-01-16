@@ -1,51 +1,72 @@
 import { useState, useEffect, useContext } from 'react';
-import { Text, View, StyleSheet, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Input, Button, Icon } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import FormPlan from '../components/FormPlan';
 import { TouchableOpacity } from 'react-native';
 
-import { setAuthToken } from '../api/config';
+import { API, jsonConfig, setAuthToken } from '../api/config';
+
 import { AuthContext } from '../context/AuthContext';
 
-export default Login = () => {
+import Plan from '../components/Plan';
+
+export default function Plans({ navigation, route }) {
 	const { state } = useContext(AuthContext);
 	const [showForm, setShowForm] = useState(false);
+
+	const [plans, setPlans] = useState([]);
+
+	const getPlans = async () => {
+		try {
+			await API.get('/plans', jsonConfig).then((response) => {
+				setPlans(response.data.data);
+			});
+		} catch (error) {}
+	};
+
 	useEffect(() => {
 		setAuthToken(state.token);
 	});
+	useEffect(() => {
+		getPlans();
+	}, []);
 	return (
-		<ScrollView>
-			<View style={styles.container}>
-				<SafeAreaView>
-					<View style={styles.makePlanContainer}>
-						<TouchableOpacity
-							style={{
-								...styles.makePlanButton,
-								borderBottomLeftRadius: showForm ? 0 : 10,
-								borderBottomEndRadius: showForm ? 0 : 10,
-							}}
-							onPress={() => setShowForm(!showForm)}
-						>
+		<View style={styles.container}>
+			<SafeAreaView>
+				<View style={styles.makePlanContainer}>
+					<TouchableOpacity
+						style={{
+							...styles.makePlanButton,
+							borderBottomLeftRadius: showForm ? 0 : 10,
+							borderBottomEndRadius: showForm ? 0 : 10,
+						}}
+						onPress={() => setShowForm(!showForm)}
+					>
+						<View style={{ justifyContent: 'center' }}>
+							<Text style={{ color: 'white' }}>Make Your plan here</Text>
+						</View>
+						<View>
+							<Icon name={!showForm ? 'pluscircleo' : 'minuscircleo'} type='antdesign' color='white' />
+						</View>
+					</TouchableOpacity>
+					{showForm && <FormPlan update={getPlans} />}
+				</View>
+				<View>
+					<FlatList
+						data={plans}
+						keyExtractor={(item) => item.id}
+						renderItem={({ item }) => (
 							<View>
-								<Text style={{ color: 'white' }}>Make Your plan here</Text>
+								<Plan {...item} update={() => getPlans()} />
 							</View>
-							<View>
-								<Icon
-									name={!showForm ? 'pluscircleo' : 'minuscircleo'}
-									type='antdesign'
-									color='white'
-								/>
-							</View>
-						</TouchableOpacity>
-						{showForm && <FormPlan />}
-					</View>
-					<View></View>
-				</SafeAreaView>
-			</View>
-		</ScrollView>
+						)}
+					/>
+				</View>
+			</SafeAreaView>
+		</View>
 	);
-};
+}
 
 const styles = StyleSheet.create({
 	container: {
@@ -53,7 +74,6 @@ const styles = StyleSheet.create({
 		padding: 20,
 	},
 	makePlanContainer: {
-		elevation: 3,
 		borderRadius: 10,
 	},
 	makePlanButton: {

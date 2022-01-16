@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { StatusBar } from 'expo-status-bar';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -34,6 +35,7 @@ export default function App() {
 		<SafeAreaProvider>
 			<AuthContext>
 				<ThemeProvider theme={theme}>
+					<StatusBar backgroundColor='rgba(0,0,0,0.2)' />
 					<NavigationContainer>
 						<Stack.Navigator initialRouteName='auth'>
 							<Stack.Screen options={{ headerShown: false }} name='auth' component={authNavigator} />

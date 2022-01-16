@@ -3,8 +3,9 @@ import { createContext, useState, useReducer } from 'react';
 export const AuthContext = createContext();
 
 const initialState = {
-	token: '',
+	token: null,
 	isLogin: false,
+	profile: null,
 };
 const reducer = (state, action) => {
 	switch (action.type) {
@@ -12,11 +13,14 @@ const reducer = (state, action) => {
 			return {
 				token: action.payload.token,
 				isLogin: true,
+				profile: action.payload.profile,
 			};
+		case 'LOGOUT':
 		case 'LOGIN_FAILED':
 			return {
-				token: action.payload.token,
-				isLogin: true,
+				token: null,
+				isLogin: false,
+				profile: null,
 			};
 		default:
 			break;

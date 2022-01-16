@@ -21,7 +21,7 @@ export default Login = ({ navigation }) => {
 					ToastAndroid.show(response.data.status, ToastAndroid.SHORT);
 					dispatch({
 						type: 'LOGIN_SUCCESS',
-						payload: { token: response.data.data.token },
+						payload: { token: response.data.data.token, profile: response.data.data.profile },
 					});
 					navigation.navigate('home');
 				})
@@ -48,11 +48,13 @@ export default Login = ({ navigation }) => {
 				</View>
 				<View>
 					<Input
+						style={{ color: 'gray' }}
 						placeholder='Email or phone'
 						onChangeText={(e) => setForm({ ...form, email: e.replace(' ', ''), phone: e.replace(' ', '') })}
 						leftIcon={<Icon name='email' color='gray' />}
 					/>
 					<Input
+						style={{ color: 'gray' }}
 						secureTextEntry={true}
 						onChangeText={(e) => setForm({ ...form, password: e })}
 						placeholder='Password'

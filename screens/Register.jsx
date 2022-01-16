@@ -41,6 +41,7 @@ export default Login = ({ navigation }) => {
 					<View style={styles.name}>
 						<View style={{ width: '50%' }}>
 							<Input
+								style={styles.input}
 								placeholder='First Name'
 								onChangeText={(e) => setForm({ ...form, firstName: e.replace(' ', '') })}
 								leftIcon={<Icon name='user' type='feather' color='gray' />}
@@ -48,6 +49,7 @@ export default Login = ({ navigation }) => {
 						</View>
 						<View style={{ width: '50%' }}>
 							<Input
+								style={styles.input}
 								placeholder='Last Name'
 								onChangeText={(e) => setForm({ ...form, lastName: e.replace(' ', '') })}
 								leftIcon={<Icon name='user' type='feather' style={{ width: 0 }} />}
@@ -55,19 +57,21 @@ export default Login = ({ navigation }) => {
 						</View>
 					</View>
 					<Input
+						style={styles.input}
 						placeholder='Email'
 						onChangeText={(e) => setForm({ ...form, email: e.replace(' ', '') })}
 						leftIcon={<Icon name='email' color='gray' />}
 					/>
 					<Input
+						style={styles.input}
 						secureTextEntry={true}
 						onChangeText={(e) => setForm({ ...form, password: e })}
 						placeholder='Password'
 						leftIcon={<Icon name='lock' color='gray' />}
 					/>
 					<Input
+						style={styles.input}
 						placeholder='Phone : +6281234567890'
-						importantForAutofill='as'
 						keyboardType='numeric'
 						onChangeText={(e) => setForm({ ...form, phone: e.replace(' ', '') })}
 						leftIcon={<Icon name='phone-enabled' color='gray' />}
@@ -102,5 +106,8 @@ const styles = StyleSheet.create({
 	},
 	name: {
 		flexDirection: 'row',
+	},
+	input: {
+		color: 'gray',
 	},
 });

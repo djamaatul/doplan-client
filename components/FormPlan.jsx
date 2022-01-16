@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, ToastAndroid } from 'react-native';
 import { Input, Button, Icon } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -6,9 +6,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { months } from '../data/date';
 
 import { API, jsonConfig } from '../api/config';
-import { TouchableHighlight } from 'react-native-gesture-handler';
 
-export default function FormPlan() {
+export default function FormPlan(props) {
 	const [form, setForm] = useState({
 		title: '',
 		body: 'I hope this plan be succes!',
@@ -18,14 +17,10 @@ export default function FormPlan() {
 	const [showDate, setShowDate] = useState(false);
 	const [showTime, setShowTime] = useState(false);
 
-	const handleShowDate = () => {
-		setShowDate(!showDate);
-	};
 	const makePlan = async () => {
 		try {
 			await API.post('/plan', JSON.stringify({ ...form, date: date.getTime() }), jsonConfig)
 				.then((response) => {
-					console.log({ ...form, date });
 					ToastAndroid.show(response.data.status, ToastAndroid.SHORT);
 				})
 				.catch((error) => {
@@ -35,13 +30,20 @@ export default function FormPlan() {
 	};
 	const handleMakePlan = () => {
 		makePlan();
+		props.update();
 	};
+	useEffect(() => {
+		setShowDate(false);
+	}, [date, time]);
 	return (
 		<View style={styles.input}>
 			<Input placeholder='Type your title plan here' onChangeText={(e) => setForm({ ...form, title: e })} />
 			<Text>
 				<Button
-					onPress={handleShowDate}
+					buttonStyle={{
+						backgroundColor: 'rgba(0,0,0,0.3)',
+					}}
+					onPress={() => setShowDate(!showDate)}
 					icon={<Icon size={20} name='calendar-today' color='white' />}
 					title={
 						<Text style={{ color: 'white' }}>{`${
@@ -63,8 +65,8 @@ export default function FormPlan() {
 				<DateTimePicker
 					mode='date'
 					onChange={(e, i) => {
+						setShowDate(false);
 						setDate(i ? i : date);
-						handleShowDate();
 						setShowTime(!showTime);
 					}}
 					value={date}
@@ -74,10 +76,10 @@ export default function FormPlan() {
 				<DateTimePicker
 					mode='time'
 					onChange={(e, i) => {
+						setShowTime(false);
 						setTime(i ? i : time);
 						date.setHours(time.getHours());
 						date.setMinutes(time.getMinutes());
-						setShowTime(!showTime);
 					}}
 					value={time}
 				/>
