@@ -22,6 +22,7 @@ export default function FormPlan(props) {
 			await API.post('/plan', JSON.stringify({ ...form, date: date.getTime() }), jsonConfig)
 				.then((response) => {
 					ToastAndroid.show(response.data.status, ToastAndroid.SHORT);
+					props.update();
 				})
 				.catch((error) => {
 					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
@@ -30,7 +31,6 @@ export default function FormPlan(props) {
 	};
 	const handleMakePlan = () => {
 		makePlan();
-		props.update();
 	};
 	useEffect(() => {
 		setShowDate(false);

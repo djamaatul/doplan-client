@@ -9,10 +9,13 @@ import EditPlan from '../components/EditPlan';
 import { API, jsonConfig } from '../api/config';
 
 export default function Plan(props) {
+	const date = new Date();
+	const dateStatus = new Date(props.date).getDate() - date.getDate();
 	const [check, setCheck] = useState(props.status == true ? true : false);
 	const [showDetail, setShowDetail] = useState(false);
 	const [showConfirm, setConfirm] = useState(false);
 	const [showEdit, setShowEdit] = useState(false);
+	const [showOption, setShowOption] = useState(false);
 
 	const handleCheck = async () => {
 		try {
@@ -24,7 +27,7 @@ export default function Plan(props) {
 				jsonConfig
 			)
 				.then((response) => {
-					ToastAndroid.show(response.data.status, ToastAndroid.SHORT);
+					props.update();
 				})
 				.catch((error) => {
 					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
@@ -33,6 +36,9 @@ export default function Plan(props) {
 			console.log(error);
 		}
 	};
+	useEffect(() => {
+		handleCheck();
+	}, [check]);
 
 	useEffect(() => {
 		props.update();
@@ -40,39 +46,63 @@ export default function Plan(props) {
 
 	return (
 		<View>
-			<TouchableOpacity onPress={() => setShowDetail(!showDetail)}>
+			<TouchableOpacity
+				onLongPress={() => setShowOption(true)}
+				onPressOut={() => {
+					setTimeout(() => {
+						setShowOption(false);
+					}, 3000);
+				}}
+				onPress={() => setShowDetail(!showDetail)}
+			>
 				<View style={styles.planContainer}>
 					<View style={{ flexDirection: 'row' }}>
 						<CheckBox
 							center
-							checked={!check}
+							checked={check}
 							onPress={() => {
-								handleCheck();
 								setCheck(!check);
 							}}
 							containerStyle={{ padding: 0 }}
 						/>
 						<View>
-							<Text style={styles.title}>{`${props.title.slice(0, 25)}${
-								props.title.length > 25 ? '...' : ''
-							}`}</Text>
-							<Text style={styles.body}>{`${props.body.slice(0, 28)}${
-								props.body.length > 28 ? '...' : ''
-							}`}</Text>
+							<Text
+								style={{
+									...styles.title,
+									textDecorationLine: props.status == true ? 'line-through' : 'normal',
+								}}
+							>{`${props.title.slice(0, 26)}${props.title.length > 40 ? '...' : ''}`}</Text>
+							<Text
+								style={{
+									...styles.body,
+									textDecorationLine: props.status == true ? 'line-through' : 'normal',
+								}}
+							>{`${props.body.slice(0, 30)}${props.body.length > 40 ? '...' : ''}`}</Text>
 						</View>
 					</View>
-					<View style={{ flexDirection: 'row' }}>
-						<Button
-							type='clear'
-							icon={<Icon name='edit' color='gray' />}
-							onPress={() => setShowEdit(!showEdit)}
-						/>
-						<Button
-							type='clear'
-							icon={<Icon name='delete' color='#EF5350' />}
-							onPress={() => setConfirm(!showConfirm)}
-						/>
-					</View>
+					{showOption ? (
+						<View style={{ flexDirection: 'row' }}>
+							<Button
+								type='clear'
+								icon={<Icon name='edit' color='gray' />}
+								onPress={() => setShowEdit(!showEdit)}
+							/>
+							<Button
+								type='clear'
+								icon={<Icon name='delete' color='#FF8A80' />}
+								onPress={() => setConfirm(!showConfirm)}
+							/>
+						</View>
+					) : (
+						<Text
+							style={{
+								color: 'white',
+								backgroundColor: dateStatus > 0 ? '#4CAF50' : '#FFC107',
+								borderRadius: 3,
+								paddingHorizontal: 5,
+							}}
+						>{`${dateStatus} day more`}</Text>
+					)}
 				</View>
 			</TouchableOpacity>
 			{showDetail && (

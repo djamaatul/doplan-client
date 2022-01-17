@@ -15,12 +15,14 @@ export default function Plans({ navigation, route }) {
 	const { state } = useContext(AuthContext);
 	const [showForm, setShowForm] = useState(false);
 
-	const [plans, setPlans] = useState([]);
+	const [plansSuccess, setPlansSuccess] = useState([]);
+	const [plansWaiting, setPlansWaiting] = useState([]);
 
 	const getPlans = async () => {
 		try {
 			await API.get('/plans', jsonConfig).then((response) => {
-				setPlans(response.data.data);
+				setPlansSuccess(response.data.data.filter((e) => e.status == true));
+				setPlansWaiting(response.data.data.filter((e) => e.status == false));
 			});
 		} catch (error) {}
 	};
@@ -54,7 +56,16 @@ export default function Plans({ navigation, route }) {
 				</View>
 				<View>
 					<FlatList
-						data={plans}
+						data={plansWaiting}
+						keyExtractor={(item) => item.id}
+						renderItem={({ item }) => (
+							<View>
+								<Plan {...item} update={() => getPlans()} />
+							</View>
+						)}
+					/>
+					<FlatList
+						data={plansSuccess}
 						keyExtractor={(item) => item.id}
 						renderItem={({ item }) => (
 							<View>
