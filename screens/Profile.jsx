@@ -27,6 +27,11 @@ export default function Profile({ navigation }) {
 	useEffect(() => {
 		getPlans();
 	}, []);
+	useEffect(() => {
+		navigation.addListener('tabPress', (e) => {
+			getPlans();
+		});
+	}, [navigation]);
 	return (
 		<View style={styles.container}>
 			<View

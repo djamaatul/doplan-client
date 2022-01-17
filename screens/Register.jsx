@@ -15,10 +15,10 @@ export default Login = ({ navigation }) => {
 	});
 	const register = async () => {
 		try {
+			console.log(form);
 			const response = await API.post('/register', JSON.stringify(form), jsonConfig)
 				.then((response) => {
-					console.log(response);
-					ToastAndroid.show('Thanks you,registed Success'.message, ToastAndroid.LONG);
+					ToastAndroid.show('Thanks you,registed Success', ToastAndroid.LONG);
 					navigation.goBack();
 				})
 				.catch((error) => {
@@ -43,7 +43,7 @@ export default Login = ({ navigation }) => {
 							<Input
 								style={styles.input}
 								placeholder='First Name'
-								onChangeText={(e) => setForm({ ...form, firstName: e.replace(' ', '') })}
+								onChangeText={(e) => setForm({ ...form, firstName: e.toLowerCase() })}
 								leftIcon={<Icon name='user' type='feather' color='gray' />}
 							/>
 						</View>
@@ -51,7 +51,7 @@ export default Login = ({ navigation }) => {
 							<Input
 								style={styles.input}
 								placeholder='Last Name'
-								onChangeText={(e) => setForm({ ...form, lastName: e.replace(' ', '') })}
+								onChangeText={(e) => setForm({ ...form, lastName: e.toLowerCase() })}
 								leftIcon={<Icon name='user' type='feather' style={{ width: 0 }} />}
 							/>
 						</View>
@@ -59,7 +59,7 @@ export default Login = ({ navigation }) => {
 					<Input
 						style={styles.input}
 						placeholder='Email'
-						onChangeText={(e) => setForm({ ...form, email: e.replace(' ', '') })}
+						onChangeText={(e) => setForm({ ...form, email: e.replace(' ', '').toLowerCase() })}
 						leftIcon={<Icon name='email' color='gray' />}
 					/>
 					<Input
