@@ -16,7 +16,7 @@ import homeNavigator from './navigations/homeNavigator';
 export default function App() {
 	const theme = {
 		colors: {
-			primary: '#4CAF50',
+			primary: '#66BB6A',
 			dark: '#2E7D32',
 		},
 		Input: {

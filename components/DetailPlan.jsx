@@ -26,8 +26,9 @@ export default function DetailPlan(props) {
 const styles = StyleSheet.create({
 	devider: { borderTopColor: 'rgba(0,0,0,0.1)', borderWidth: 0.3, marginVertical: 10 },
 	overlay: {
-		width: '80%',
+		width: '90%',
 		overflow: 'hidden',
+		paddingBottom: 30,
 	},
 	group: {
 		paddingHorizontal: 10,

@@ -60,23 +60,23 @@ export default function Profile({ navigation }) {
 					</Text>
 					<View
 						style={{
-							backgroundColor: '#A5D6A7',
-							height: 30,
+							backgroundColor: 'rgba(0,0,0,0.1)',
+							height: 25,
 							borderRadius: 10,
 							position: 'relative',
 						}}
 					>
 						<View
 							style={{
-								backgroundColor: '#4CAF50',
+								backgroundColor: '#66BB6A',
 								width: `${progress}%`,
-								height: 30,
+								height: 25,
 								borderRadius: 10,
 								alignItems: 'center',
 								justifyContent: 'center',
 							}}
 						>
-							<Text style={{ color: 'white', fontWeight: 'bold', fontSize: 25 }}>{`${
+							<Text style={{ color: 'white', fontWeight: 'bold', fontSize: 20 }}>{`${
 								plansSuccess.length
 							}/${plansWaiting.length + plansSuccess.length}`}</Text>
 						</View>
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	profile: {
-		backgroundColor: '#4CAF50',
+		backgroundColor: '#66BB6A',
 		borderBottomLeftRadius: 15,
 		borderBottomRightRadius: 15,
 		alignItems: 'center',

@@ -88,11 +88,12 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 	},
 	makePlanButton: {
-		backgroundColor: '#4CAF50',
+		backgroundColor: '#66BB6A',
 		borderTopEndRadius: 10,
 		borderTopStartRadius: 10,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		padding: 15,
+		marginBottom: 10,
 	},
 });

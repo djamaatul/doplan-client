@@ -69,13 +69,13 @@ export default function Plan(props) {
 							<Text
 								style={{
 									...styles.title,
-									textDecorationLine: props.status == true ? 'line-through' : 'normal',
+									textDecorationLine: props.status == true ? 'line-through' : 'none',
 								}}
 							>{`${props.title.slice(0, 26)}${props.title.length > 40 ? '...' : ''}`}</Text>
 							<Text
 								style={{
 									...styles.body,
-									textDecorationLine: props.status == true ? 'line-through' : 'normal',
+									textDecorationLine: props.status == true ? 'line-through' : 'none',
 								}}
 							>{`${props.body.slice(0, 30)}${props.body.length > 40 ? '...' : ''}`}</Text>
 						</View>
@@ -97,11 +97,13 @@ export default function Plan(props) {
 						<Text
 							style={{
 								color: 'white',
-								backgroundColor: dateStatus > 0 ? '#4CAF50' : '#FFC107',
+								backgroundColor: dateStatus > 0 ? '#FFC107' : '#66BB6A',
 								borderRadius: 3,
 								paddingHorizontal: 5,
 							}}
-						>{`${dateStatus} day more`}</Text>
+						>
+							{dateStatus > 0 ? `${dateStatus} day more` : `${dateStatus * -1} day ago`}
+						</Text>
 					)}
 				</View>
 			</TouchableOpacity>
