@@ -9,13 +9,10 @@ import EditPlan from '../components/EditPlan';
 import { API, jsonConfig } from '../api/config';
 
 export default function Plan(props) {
-	const date = new Date();
-	const dateStatus = new Date(props.date).getDate() - date.getDate();
 	const [check, setCheck] = useState(props.status == true ? true : false);
 	const [showDetail, setShowDetail] = useState(false);
 	const [showConfirm, setConfirm] = useState(false);
 	const [showEdit, setShowEdit] = useState(false);
-	const [showOption, setShowOption] = useState(false);
 
 	const handleCheck = async () => {
 		try {
@@ -46,15 +43,7 @@ export default function Plan(props) {
 
 	return (
 		<View>
-			<TouchableOpacity
-				onLongPress={() => setShowOption(true)}
-				onPressOut={() => {
-					setTimeout(() => {
-						setShowOption(false);
-					}, 3000);
-				}}
-				onPress={() => setShowDetail(!showDetail)}
-			>
+			<TouchableOpacity onPress={() => setShowDetail(!showDetail)}>
 				<View style={styles.planContainer}>
 					<View style={{ flexDirection: 'row' }}>
 						<CheckBox
@@ -80,31 +69,18 @@ export default function Plan(props) {
 							>{`${props.body.slice(0, 30)}${props.body.length > 40 ? '...' : ''}`}</Text>
 						</View>
 					</View>
-					{showOption ? (
-						<View style={{ flexDirection: 'row' }}>
-							<Button
-								type='clear'
-								icon={<Icon name='edit' color='gray' />}
-								onPress={() => setShowEdit(!showEdit)}
-							/>
-							<Button
-								type='clear'
-								icon={<Icon name='delete' color='#FF8A80' />}
-								onPress={() => setConfirm(!showConfirm)}
-							/>
-						</View>
-					) : (
-						<Text
-							style={{
-								color: 'white',
-								backgroundColor: dateStatus > 0 ? '#FFC107' : '#66BB6A',
-								borderRadius: 3,
-								paddingHorizontal: 5,
-							}}
-						>
-							{dateStatus > 0 ? `${dateStatus} day more` : `${dateStatus * -1} day ago`}
-						</Text>
-					)}
+					<View style={{ flexDirection: 'row' }}>
+						<Button
+							type='clear'
+							icon={<Icon name='edit' color='gray' />}
+							onPress={() => setShowEdit(!showEdit)}
+						/>
+						<Button
+							type='clear'
+							icon={<Icon name='delete' color='#FF8A80' />}
+							onPress={() => setConfirm(!showConfirm)}
+						/>
+					</View>
 				</View>
 			</TouchableOpacity>
 			{showDetail && (

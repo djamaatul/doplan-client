@@ -26,12 +26,13 @@ export default function DetailPlan(props) {
 					<Text style={styles.title}>Are you sure ?</Text>
 				</View>
 				<View style={styles.buttonContainer}>
-					<Button title='Cancel' buttonStyle={{ backgroundColor: 'gray' }} onPress={props.toggleConfirm} />
 					<Button
-						title='Confirm'
-						buttonStyle={{ marginLeft: 10, backgroundColor: '#EF5350' }}
-						onPress={confirm}
+						title='Cancel'
+						type='clear'
+						titleStyle={{ color: 'rgba(0,0,0,0.4)' }}
+						onPress={props.toggleConfirm}
 					/>
+					<Button title='Confirm' type='clear' onPress={confirm} />
 				</View>
 			</View>
 		</Overlay>
@@ -39,20 +40,21 @@ export default function DetailPlan(props) {
 }
 
 const styles = StyleSheet.create({
-	titleContainer: {
-		paddingBottom: 20,
-	},
-	title: {
-		fontSize: 20,
-		color: '#4CAF50',
-	},
 	overlay: {
 		width: 150,
 		justifyContent: 'space-between',
-		alignItems: 'center',
+	},
+	titleContainer: {
+		padding: 0,
+	},
+	title: {
+		fontSize: 18,
+		fontWeight: 'bold',
+		color: '#4CAF50',
 	},
 	buttonContainer: {
 		flexDirection: 'row',
 		justifyContent: 'flex-end',
+		marginTop: 40,
 	},
 });

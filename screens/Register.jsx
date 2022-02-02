@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, ToastAndroid, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ToastAndroid, TouchableOpacity, Picker, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Input, Button, Icon } from 'react-native-elements';
 
 import { API, jsonConfig } from '../api/config';
 
+import { countryDial } from '../data/countryDial';
+
 export default Login = ({ navigation }) => {
+	const [selectPhone, setSelectPhone] = useState('');
 	const [form, setForm] = useState({
 		firstName: '',
 		lastName: '',
@@ -15,8 +18,11 @@ export default Login = ({ navigation }) => {
 	});
 	const register = async () => {
 		try {
-			console.log(form);
-			const response = await API.post('/register', JSON.stringify(form), jsonConfig)
+			const response = await API.post(
+				'/register',
+				JSON.stringify({ ...form, phone: selectPhone + form.phone }),
+				jsonConfig
+			)
 				.then((response) => {
 					ToastAndroid.show('Thanks you,registed Success', ToastAndroid.LONG);
 					navigation.goBack();
@@ -69,12 +75,23 @@ export default Login = ({ navigation }) => {
 						placeholder='Password'
 						leftIcon={<Icon name='lock' color='gray' />}
 					/>
+
 					<Input
 						style={styles.input}
-						placeholder='Phone : +6281234567890'
+						placeholder='Phone : 81234567890'
 						keyboardType='numeric'
 						onChangeText={(e) => setForm({ ...form, phone: e.replace(' ', '') })}
-						leftIcon={<Icon name='phone-enabled' color='gray' />}
+						leftIcon={
+							<Picker
+								selectedValue={form.phone}
+								style={{ height: 50, width: 100 }}
+								onValueChange={(e) => setSelectPhone(e)}
+							>
+								{countryDial.map((e) => {
+									return <Picker.Item label={`${e.dial_code}  ${e.name}`} value={e.dial_code} />;
+								})}
+							</Picker>
+						}
 					/>
 				</View>
 				<View style={styles.button}>
